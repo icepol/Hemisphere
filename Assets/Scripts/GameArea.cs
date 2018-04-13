@@ -28,12 +28,16 @@ public class GameArea : MonoBehaviour {
 	[SerializeField]
 	Color[] colors;
 
+	[SerializeField]
+	GameObject pausePanel;
+
 	GameObject shapesRing;
 	GameObject colorsRing;
 
 	GameObject wrappers;
 	Animator wrappersAnimator;
 	ScoreCounter scoreCounter;
+	Animator pauseAnimator;
 
 	Spawner spawner;
 	SoundsManager soundsManager;
@@ -41,6 +45,8 @@ public class GameArea : MonoBehaviour {
 	GameControlls gameControlls;
 
 	void Awake() {
+		pauseAnimator = GameObject.Find ("PausePanel").GetComponent<Animator> ();
+
 		wrappers = GameObject.Find ("Wrappers");
 		wrappersAnimator = wrappers.GetComponent<Animator> ();
 
@@ -277,5 +283,17 @@ public class GameArea : MonoBehaviour {
 	public void Resume() {
 		spawner.Resume ();
 		gameControlls.Resume ();
+	}
+
+	public void ShowPausePanel() {
+		Pause();
+
+		pauseAnimator.SetTrigger("ShowPause");
+	}
+
+	public void HidePausePanel() {
+		pauseAnimator.SetTrigger("HidePause");
+
+		Resume();
 	}
 }
