@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Advertisements;
 
 public class ScorePanel : MonoBehaviour {
 
@@ -30,7 +31,7 @@ public class ScorePanel : MonoBehaviour {
     IEnumerator NewTop() {
         yield return new WaitForSeconds(1f);
 
-        if (Settings.IsNewTop || true) {
+        if (Settings.IsNewTop) {
             // show label
             animator.SetTrigger("NewTopScore");
 
@@ -40,6 +41,12 @@ public class ScorePanel : MonoBehaviour {
             if (soundsManager) {
                 soundsManager.Top();
             }
+        }
+
+        if (Advertisement.IsReady()) {
+            yield return new WaitForSeconds(1f);
+
+            Advertisement.Show();
         }
     }
 }
