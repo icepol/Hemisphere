@@ -161,6 +161,6 @@ public class GameControlls : MonoBehaviour {
 	}
 
 	public void FastForward() {
-		
+        gameArea.FastForward();
 	}
 }

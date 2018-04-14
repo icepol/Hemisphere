@@ -85,6 +85,9 @@ MonoBehaviour:
   - {r: 0.98823535, g: 0.91372555, b: 0.37254903, a: 1}
   - {r: 0.37254903, g: 0.24705884, b: 0.6862745, a: 1}
   - {r: 0.3921569, g: 0.48235297, b: 0.53333336, a: 1}
+  pausePanel: {fileID: 0}
+  fastForwardMoveSpeed: 4
+  fastForwardScoreSpeed: 10
 --- !u!114 &114607107180620276
 MonoBehaviour:
   m_ObjectHideFlags: 1

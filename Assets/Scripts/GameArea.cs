@@ -32,6 +32,13 @@ public class GameArea : MonoBehaviour {
 	[SerializeField]
 	GameObject pausePanel;
 
+    [SerializeField]
+    float fastForwardMoveSpeed = 4f;
+    [SerializeField]
+    float fastForwardScoreSpeed = 10f;
+
+    float fastForwardCurrentDelay = 0f;
+
 	GameObject shapesRing;
 	GameObject colorsRing;
 
@@ -47,17 +54,17 @@ public class GameArea : MonoBehaviour {
 	GameControlls gameControlls;
 
 	void Awake() {
-        lives = GameObject.FindObjectOfType<Lives>();
+        lives = FindObjectOfType<Lives>();
 		pauseAnimator = GameObject.Find ("PausePanel").GetComponent<Animator> ();
 
 		wrappers = GameObject.Find ("Wrappers");
 		wrappersAnimator = wrappers.GetComponent<Animator> ();
 
-		spawner = GameObject.FindObjectOfType<Spawner> ();
-		soundsManager = GameObject.FindObjectOfType<SoundsManager> ();
-		scoreCounter = GameObject.FindObjectOfType<ScoreCounter> ();
-		gameManager = GameObject.FindObjectOfType<GameManager> ();
-		gameControlls = GameObject.FindObjectOfType<GameControlls> ();
+		spawner = FindObjectOfType<Spawner> ();
+		soundsManager = FindObjectOfType<SoundsManager> ();
+		scoreCounter = FindObjectOfType<ScoreCounter> ();
+		gameManager = FindObjectOfType<GameManager> ();
+		gameControlls = FindObjectOfType<GameControlls> ();
 
 		shapesRing = new GameObject ();
 		shapesRing.AddComponent<WrapperController> ();
@@ -322,9 +329,20 @@ public class GameArea : MonoBehaviour {
 		Resume();
 	}
 
-	public void FastForwardButton() {
-		scoreCounter.Score += 1;
+	public void FastForward() {
+        if (fastForwardCurrentDelay <= 0) {
+            scoreCounter.Score += 1;
+            fastForwardCurrentDelay = 1f;
+        }
+        else {
+            fastForwardCurrentDelay -= Time.deltaTime * fastForwardScoreSpeed;
+        }
 
-
+        // speed up all moving shapes
+        foreach (Transform child in spawner.transform) {
+            child.GetComponent<MovingShape>().FastForward(
+                Time.deltaTime * fastForwardMoveSpeed
+            );
+        }
 	}
 }

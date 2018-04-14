@@ -51,6 +51,10 @@ public class MovingShape : MonoBehaviour {
 		}
 	}
 
+    public void FastForward(float speed) {
+        currentTime += speed;
+    }
+
 	void OnDestroy() {
 		count--;
 	}
