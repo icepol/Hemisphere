@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Analytics;
 
 public class GameManager : MonoBehaviour {
 
@@ -33,12 +34,11 @@ public class GameManager : MonoBehaviour {
 	public static void IncrementLevel() {
 		level++;
 
-		print ("increment level");
-
 		onLevelIncremented ();
 	}
 
 	public void LoadScene(string scene) {
+		AnalyticsEvent.ScreenVisit(scene);
 		SceneManager.LoadScene (scene);
 	}
 
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour {
 			soundsManager.ButtonClick ();
 		}
 
+		AnalyticsEvent.ScreenVisit(scene);
 		SceneManager.LoadScene (scene);
 	}
 }

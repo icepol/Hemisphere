@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class GameArea : MonoBehaviour {
 
@@ -39,12 +40,14 @@ public class GameArea : MonoBehaviour {
 	ScoreCounter scoreCounter;
 	Animator pauseAnimator;
 
+    Lives lives;
 	Spawner spawner;
 	SoundsManager soundsManager;
 	GameManager gameManager;
 	GameControlls gameControlls;
 
 	void Awake() {
+        lives = GameObject.FindObjectOfType<Lives>();
 		pauseAnimator = GameObject.Find ("PausePanel").GetComponent<Animator> ();
 
 		wrappers = GameObject.Find ("Wrappers");
@@ -67,18 +70,24 @@ public class GameArea : MonoBehaviour {
 		GameManager.onLevelIncremented += IncrementLevel;
 	}
 
+	void OnDestroy() {
+		GameManager.onLevelIncremented -= IncrementLevel;
+	}
+
 	// Use this for initialization
 	void Start () {
+        AnalyticsEvent.GameStart(null);
+
 		// reset level
 		GameManager.Level = 1;
-
-		print ("game area start");
 
 		// start game
 		StartLevel ();
 	}
 
 	void StartLevel() {
+        AnalyticsEvent.LevelStart(GameManager.Level.ToString());
+
 		if (soundsManager) {
 			soundsManager.Ring ();
 		}
@@ -106,6 +115,8 @@ public class GameArea : MonoBehaviour {
 	}
 
 	void StopLevel() {
+        AnalyticsEvent.LevelComplete(GameManager.Level.ToString());
+		
 		if (soundsManager) {
 			soundsManager.Ring ();
 		}
@@ -256,12 +267,18 @@ public class GameArea : MonoBehaviour {
 		return (level > 0 ? level : GameManager.Level) + 1;
 	}
 
-	public void CheckGameOver() {
-		// save score
-		Settings.LastScore = scoreCounter.Score;
+	public void LostLive() {
+		lives.CurrentLives--;
 
-		// hide game area
-		StartCoroutine(GameOver());
+		if (lives.CurrentLives == 0) {
+            AnalyticsEvent.LevelFail(GameManager.Level.ToString());
+
+			// save score
+			Settings.LastScore = scoreCounter.Score;
+
+			// hide game area
+			StartCoroutine(GameOver());
+		}
 	}
 
 	IEnumerator GameOver() {
@@ -288,12 +305,26 @@ public class GameArea : MonoBehaviour {
 	public void ShowPausePanel() {
 		Pause();
 
+		if (soundsManager) {
+			soundsManager.ButtonClick ();
+		}
+
 		pauseAnimator.SetTrigger("ShowPause");
 	}
 
 	public void HidePausePanel() {
 		pauseAnimator.SetTrigger("HidePause");
 
+		if (soundsManager) {
+			soundsManager.ButtonClick ();
+		}
+
 		Resume();
+	}
+
+	public void FastForwardButton() {
+		scoreCounter.Score += 1;
+
+
 	}
 }

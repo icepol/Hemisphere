@@ -9,13 +9,13 @@ public class MovingShape : MonoBehaviour {
 	float time;
 	float currentTime = 0;
 	bool isPaused = false;
+    bool isActive = true;
 
 	Vector3 startPosition;
 	Vector3 targetPosition;
 
 	SpriteRenderer spriteRenderer;
 	ScoreCounter scoreCounter;
-	Lives lives;
 
 	GameArea gameArea;
 	SoundsManager soundsManager;
@@ -29,11 +29,10 @@ public class MovingShape : MonoBehaviour {
 	void Awake() {
 		spriteRenderer = gameObject.GetComponentInChildren<ShapeInner> ().GetComponent<SpriteRenderer> ();
 
-		scoreCounter = GameObject.FindObjectOfType<ScoreCounter> ();
-		lives = GameObject.FindObjectOfType<Lives> ();
+		scoreCounter = FindObjectOfType<ScoreCounter> ();
 
-		gameArea = GameObject.FindObjectOfType<GameArea> ();
-		soundsManager = GameObject.FindObjectOfType<SoundsManager> ();
+		gameArea = FindObjectOfType<GameArea> ();
+		soundsManager = FindObjectOfType<SoundsManager> ();
 
 		count++;
 	}
@@ -57,6 +56,10 @@ public class MovingShape : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D collider) {
+        if (!isActive) {
+            return;
+        }
+
 		Shape shape = collider.gameObject.GetComponent<Shape> ();
 		if (shape && shape.Match (this)) {
 			// increment score
@@ -70,15 +73,12 @@ public class MovingShape : MonoBehaviour {
 			// create animation
 			Instantiate(right, transform.position, Quaternion.identity);
 
-			Destroy (gameObject);
+            isActive = false;
+            StartCoroutine(Hide());
 		} else {
 			// collision with another object, decrement lives
-			lives.CurrentLives--;
-
-			if (lives.CurrentLives == 0) {
-				gameArea.CheckGameOver ();
-			}
-
+			gameArea.LostLive ();
+			
 			// destroy with effect
 			if (soundsManager) {
 				soundsManager.Explode ();
@@ -86,9 +86,18 @@ public class MovingShape : MonoBehaviour {
 
 			Instantiate(wrong, transform.position, Quaternion.identity);
 
-			Destroy (gameObject);
+            isActive = false;
+            StartCoroutine(Hide());
 		}
 	}
+
+    IEnumerator Hide() {
+        transform.localScale = new Vector2(0, 0);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Destroy(gameObject);
+    }
 
 	public void MoveIn(float time) {
 		this.time = time;
@@ -121,10 +130,10 @@ public class MovingShape : MonoBehaviour {
 	}
 
 	public void Pause() {
-		isPaused = true;
+        isPaused = true;
 	}
 
 	public void Resume() {
-		isPaused = false;
+        isPaused = false;
 	}
 }

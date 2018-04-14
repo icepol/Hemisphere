@@ -27,8 +27,8 @@ public class GameControlls : MonoBehaviour {
 	bool rightUpPressed = false;
 	bool rightDownPressed = false;
 
+	bool fastForward = false;
 	bool isPaused = false;
-
 
 	// Use this for initialization
 	void Start () {
@@ -70,6 +70,10 @@ public class GameControlls : MonoBehaviour {
 		if (Input.GetKeyUp (KeyCode.K) || Input.GetKeyUp (KeyCode.M)) {
 			colorsRingCurrentSpeed = ringRotationSpeedMin;
 		}
+
+		if (fastForward) {
+			FastForward();
+		}
 	}
 
 	// button pressed handler
@@ -86,6 +90,9 @@ public class GameControlls : MonoBehaviour {
 			break;
 		case "RightDown":
 			rightDownPressed = true;
+			break;
+		case "FastForward":
+			fastForward = true;
 			break;
 		}
 	}
@@ -108,6 +115,9 @@ public class GameControlls : MonoBehaviour {
 		case "RightDown":
 			rightDownPressed = false;
 			colorsRingCurrentSpeed = ringRotationSpeedMin;
+			break;
+		case "FastForward":
+			fastForward = false;
 			break;
 		}
 	}
@@ -148,5 +158,9 @@ public class GameControlls : MonoBehaviour {
 
 	public void Resume() {
 		isPaused = false;
+	}
+
+	public void FastForward() {
+		
 	}
 }
