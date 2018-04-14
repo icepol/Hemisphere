@@ -5,27 +5,41 @@ using UnityEngine.UI;
 
 public class ScorePanel : MonoBehaviour {
 
-	[SerializeField]
-	Text scoreText;
+    [SerializeField]
+    Text scoreText;
 
-	[SerializeField]
-	Text topText;
+    [SerializeField]
+    Text topText;
 
-	SoundsManager soundsManager;
+    SoundsManager soundsManager;
+    Animator animator;
 
-	void Awake() {
-		soundsManager = GameObject.FindObjectOfType<SoundsManager> ();
-	}
+    void Awake() {
+        soundsManager = FindObjectOfType<SoundsManager>();
+        animator = FindObjectOfType<Animator>();
+    }
 
-	// Use this for initialization
-	void Start () {
-		scoreText.text = Settings.LastScore.ToString ();
-		topText.text = Settings.TopScore.ToString ();
+    // Use this for initialization
+    void Start() {
+        scoreText.text = Settings.LastScore.ToString();
+        topText.text = Settings.TopScore.ToString();
 
-		if (Settings.IsNewTop) {
-			if (soundsManager) {
-				soundsManager.Top ();
-			}
-		}
-	}
+        StartCoroutine(NewTop());
+    }
+
+    IEnumerator NewTop() {
+        yield return new WaitForSeconds(1f);
+
+        if (Settings.IsNewTop || true) {
+            // show label
+            animator.SetTrigger("NewTopScore");
+
+            yield return new WaitForSeconds(0.8f);
+
+            // play sound
+            if (soundsManager) {
+                soundsManager.Top();
+            }
+        }
+    }
 }
