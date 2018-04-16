@@ -12,10 +12,12 @@ public class ScorePanel : MonoBehaviour {
     [SerializeField]
     Text topText;
 
+    GameManager gameManager;
     SoundsManager soundsManager;
     Animator animator;
 
     void Awake() {
+        gameManager = FindObjectOfType<GameManager>();
         soundsManager = FindObjectOfType<SoundsManager>();
         animator = FindObjectOfType<Animator>();
     }
@@ -24,6 +26,9 @@ public class ScorePanel : MonoBehaviour {
     void Start() {
         scoreText.text = Settings.LastScore.ToString();
         topText.text = Settings.TopScore.ToString();
+
+        // send score
+        gameManager.ReportScore(Settings.LastScore);
 
         StartCoroutine(NewTop());
     }
