@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour {
     }
 
     void OnUserAuthenticated(bool obj) {
-        print(obj);
     }
 
     public static int Level {

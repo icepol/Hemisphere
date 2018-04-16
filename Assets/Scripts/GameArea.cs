@@ -74,7 +74,7 @@ public class GameArea : MonoBehaviour {
 		colorsRing.AddComponent<WrapperController> ();
 		colorsRing.transform.SetParent(wrappers.transform);
 
-		GameManager.onLevelIncremented += IncrementLevel;
+        GameManager.onLevelIncremented += IncrementLevel;
 	}
 
 	void OnDestroy() {
@@ -84,6 +84,9 @@ public class GameArea : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         AnalyticsEvent.GameStart(null);
+
+        // load ad for later use
+        Ads.RequestInterstitial(Constants.GameOverId);
 
 		// reset level
 		GameManager.Level = 1;
