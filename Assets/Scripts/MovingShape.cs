@@ -17,7 +17,8 @@ public class MovingShape : MonoBehaviour {
 	Vector3 startPosition;
 	Vector3 targetPosition;
 
-	SpriteRenderer spriteRenderer;
+	SpriteRenderer shapeSriteRenderer;
+    SpriteRenderer backgroundSpriteRenderer;
 	ScoreCounter scoreCounter;
 
 	GameArea gameArea;
@@ -30,7 +31,8 @@ public class MovingShape : MonoBehaviour {
 	GameObject right;
 
 	void Awake() {
-		spriteRenderer = gameObject.GetComponentInChildren<ShapeInner> ().GetComponent<SpriteRenderer> ();
+        backgroundSpriteRenderer = GetComponent<SpriteRenderer>();
+        shapeSriteRenderer = GetComponentInChildren<ShapeInner> ().GetComponent<SpriteRenderer> ();
 
 		scoreCounter = FindObjectOfType<ScoreCounter> ();
 
@@ -138,24 +140,29 @@ public class MovingShape : MonoBehaviour {
 
 	public Sprite Shape {
 		get {
-			return spriteRenderer.sprite;
+            return shapeSriteRenderer.sprite;
 		}
 
 		set {
-			spriteRenderer.sprite = value;
+            shapeSriteRenderer.sprite = value;
             shapeSet = true;
 		}
 	}
 
 	public Color Color {
 		get {
-			return spriteRenderer.color;
+            return shapeSriteRenderer.color;
 		}
 
 		set {
-			spriteRenderer.color = value;
+            shapeSriteRenderer.color = value;
             colorSet = true;
-		}
+
+            // set border as well if there isn't shape defined
+            if (!IsShapeSet()) {
+                backgroundSpriteRenderer.color = value;
+            }
+        }
 	}
 
 	public static int Count {

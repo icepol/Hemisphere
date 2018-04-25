@@ -105,19 +105,22 @@ public class Spawner : MonoBehaviour {
         MovingShape shape = spawned.GetComponent<MovingShape>();
         shape.MoveIn(currentSpeed);
 
-        // set random color
-        shape.Color = gameArea.GetRandomColor();
-
         // set random shape
         shape.Shape = gameArea.GetRandomShape();
+
+        // set random color
+        shape.Color = gameArea.GetRandomColor();
     }
 
     void SpawnCombo() {
+        // position
+        float position = width * (Random.Range(-1f, 1f) > 0 ? 1 : -1);
+              
         // 1. color
         GameObject spawned = Instantiate(
             movingShape,
             new Vector3(
-                width * (Random.Range(-1f, 1f) > 0 ? 1 : -1),
+                position,
                 Random.Range(-height, height),
                 -1
             ), Quaternion.identity
@@ -134,7 +137,7 @@ public class Spawner : MonoBehaviour {
         spawned = Instantiate(
             movingShape,
             new Vector3(
-                width * (Random.Range(-1f, 1f) > 0 ? 1 : -1),
+                position * -1,
                 Random.Range(-height, height),
                 -1
             ), Quaternion.identity
