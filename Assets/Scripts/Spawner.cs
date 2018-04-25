@@ -83,7 +83,7 @@ public class Spawner : MonoBehaviour {
             soundsManager.Spawn();
         }
 
-        if (GameManager.Level > 2 && Random.Range(0, 10) > 2) {
+        if (GameManager.Level > 2 && Random.Range(0, 10) > 8) {
             SpawnCombo();
         }
         else {
