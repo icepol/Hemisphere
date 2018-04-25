@@ -130,7 +130,7 @@ public class GameArea : MonoBehaviour {
 		if (soundsManager) {
 			soundsManager.Ring ();
 		}
-
+        print("stop level");
 		spawner.StopSpawning();
 
 		StartCoroutine (HideAll ());
@@ -214,7 +214,7 @@ public class GameArea : MonoBehaviour {
 		GameObject shapeItem = Instantiate (shapeParent, itemWrapper.transform) as GameObject;
 
 		// add shape image
-		shapeItem.GetComponent<Shape>().SetShape(shapeSprite);
+		shapeItem.GetComponent<ShapeSphere>().SetShape(shapeSprite);
 
 		shapeItem.transform.localPosition = defaultPosition;
 
@@ -234,11 +234,10 @@ public class GameArea : MonoBehaviour {
 
 		// color item
 		GameObject colorItem = Instantiate (colorSphere, itemWrapper.transform) as GameObject;
-		colorItem.transform.localPosition = defaultPosition;
+        colorItem.transform.localPosition = defaultPosition;
 
-		// change color
-		SpriteRenderer renderer = colorItem.GetComponent<SpriteRenderer> ();
-		renderer.color = color;
+        ColorSphere cs = colorItem.GetComponent<ColorSphere>();
+        cs.Color = color;
 	}
 
 	IEnumerator InitRotations() {
@@ -293,7 +292,7 @@ public class GameArea : MonoBehaviour {
 
 	IEnumerator GameOver() {
 		// stop spawning and movig
-		spawner.Pause ();
+        spawner.Hide ();
 		gameControlls.Pause ();
 
 		yield return HideAll();

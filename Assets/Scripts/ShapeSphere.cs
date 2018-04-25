@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shape : MonoBehaviour {
+public class ShapeSphere : MonoBehaviour {
 
 	SpriteRenderer spriteRenderer;
 
-	// Use this for initialization
-	void Awake () {
-		spriteRenderer = gameObject.GetComponentInChildren<ShapeInner>().GetComponent<SpriteRenderer> ();
-	}
+    void Awake() {
+        spriteRenderer = gameObject.GetComponentInChildren<ShapeInner>().GetComponent<SpriteRenderer>();
+    }
 
 	void OnTriggerEnter2D(Collider2D col) {
 		ColorSphere colorSphere = col.gameObject.GetComponent<ColorSphere> ();
@@ -26,7 +25,7 @@ public class Shape : MonoBehaviour {
 	}
 
 	void ColorSphereIn(ColorSphere colorSphere) {
-		spriteRenderer.color = colorSphere.GetComponent<SpriteRenderer> ().color;
+        spriteRenderer.color = colorSphere.Color;
 	}
 
 	void ColorSphereOut(ColorSphere colorSphere) {
@@ -35,9 +34,5 @@ public class Shape : MonoBehaviour {
 
 	public void SetShape(Sprite shape) {
 		spriteRenderer.sprite = shape;
-	}
-
-	public bool Match(MovingShape movingShape) {
-		return movingShape.Color == spriteRenderer.color && movingShape.Shape == spriteRenderer.sprite;
 	}
 }

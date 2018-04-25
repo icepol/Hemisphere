@@ -24,11 +24,13 @@ public class Spawner : MonoBehaviour {
 	float width;
 
 	bool spawning = false;
+    int spawnLimit;
+
 	SoundsManager soundsManager;
 
 	void Awake() {
 		gameArea = FindObjectOfType<GameArea> ();
-		soundsManager = GameObject.FindObjectOfType<SoundsManager> ();
+		soundsManager = FindObjectOfType<SoundsManager> ();
 	}
 
 	// Use this for initialization
@@ -41,60 +43,121 @@ public class Spawner : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (!spawning) {
-			return;
+		if (spawning) {
+            Spawning();
 		}
-
-		Spawning ();
 	}
 
 	void Spawning() {
 		if (MovingShape.Count < 1) {
-			SpawnShape ();
+            // should we increment level?
+            if (spawnLimit <= 0) {
+                StopSpawning();
+
+                // increment level
+                GameManager.Level += 1;
+            }
+            else {
+                // we should spawn next item
+                SpawnShape();
+            }
 		}
 
-		// speed up moving
-		currentSpeed -= moveSpeedDecrement * Time.deltaTime;
-
-		if (currentSpeed <= levelTehreshold) {
-			// set speed back to normal
-			currentSpeed = moveSpeed;
-
-			// increment level
-			GameManager.IncrementLevel();
-		}
+        IncreaseSpeed();
 	}
+
+    void IncreaseSpeed() {
+        // speed up moving
+        currentSpeed -= moveSpeedDecrement * Time.deltaTime;
+
+        if (currentSpeed <= levelTehreshold) {
+            // set speed back to normal
+            currentSpeed = moveSpeed;
+        }
+    }
 
 	void SpawnShape() {
-		GameObject spawned = Instantiate (
-			movingShape,
-			new Vector3(width * (Random.Range(-1f, 1f) > 0 ? 1 : -1), Random.Range(-height, height), -1),
-			Quaternion.identity
-		) as GameObject;
-		spawned.transform.SetParent(gameObject.transform);
+        spawnLimit -= 1;
 
-		MovingShape shape = spawned.GetComponent<MovingShape> ();
-		shape.MoveIn (currentSpeed);
+        if (soundsManager) {
+            soundsManager.Spawn();
+        }
 
-		// set random color
-		shape.Color = gameArea.GetRandomColor();
-
-		// set random shape
-		shape.Shape = gameArea.GetRandomShape();
-
-		if (soundsManager) {
-			soundsManager.Swap ();
-		}
+        if (GameManager.Level > 2 && Random.Range(0, 10) > 2) {
+            SpawnCombo();
+        }
+        else {
+            SpawnSimpleShape();
+        }
 	}
 
+    void SpawnSimpleShape() {
+        GameObject spawned = Instantiate(
+            movingShape,
+            new Vector3(
+                width * (Random.Range(-1f, 1f) > 0 ? 1 : -1),
+                Random.Range(-height, height),
+                -1
+            ), Quaternion.identity
+        ) as GameObject;
+        spawned.transform.SetParent(gameObject.transform);
+
+        MovingShape shape = spawned.GetComponent<MovingShape>();
+        shape.MoveIn(currentSpeed);
+
+        // set random color
+        shape.Color = gameArea.GetRandomColor();
+
+        // set random shape
+        shape.Shape = gameArea.GetRandomShape();
+    }
+
+    void SpawnCombo() {
+        // 1. color
+        GameObject spawned = Instantiate(
+            movingShape,
+            new Vector3(
+                width * (Random.Range(-1f, 1f) > 0 ? 1 : -1),
+                Random.Range(-height, height),
+                -1
+            ), Quaternion.identity
+        ) as GameObject;
+        spawned.transform.SetParent(gameObject.transform);
+
+        MovingShape shape = spawned.GetComponent<MovingShape>();
+        shape.MoveIn(currentSpeed);
+
+        // set random color
+        shape.Color = gameArea.GetRandomColor();
+
+         // 2. shape
+        spawned = Instantiate(
+            movingShape,
+            new Vector3(
+                width * (Random.Range(-1f, 1f) > 0 ? 1 : -1),
+                Random.Range(-height, height),
+                -1
+            ), Quaternion.identity
+        ) as GameObject;
+        spawned.transform.SetParent(gameObject.transform);
+
+        shape = spawned.GetComponent<MovingShape>();
+        shape.MoveIn(currentSpeed);
+
+        // set random shape
+        shape.Shape = gameArea.GetRandomShape();
+    }
+
 	public void StartSpawning() {
+        spawnLimit = 10 + (GameManager.Level - 1) * 4;
+            
 		spawning = true;
 	}
 
 	public void StopSpawning() {
 		spawning = false;
 
-		// remove all childs
+        // remove all childs
 		foreach (Transform child in transform) {
 			Destroy (child.gameObject);
 		}
@@ -108,6 +171,10 @@ public class Spawner : MonoBehaviour {
 			child.gameObject.GetComponent<MovingShape>().Pause();
 		}
 	}
+
+    public void Hide() {
+        StopSpawning();
+    }
 
 	public void Resume() {
 		spawning = true;

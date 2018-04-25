@@ -25,17 +25,19 @@ public class Ads : MonoBehaviour {
     }
 
     public static bool IsInterstitialLoaded() {
-        return interstitial.IsLoaded();
+        return interstitial != null && interstitial.IsLoaded();
     }
 
     public static void ShowIntertitial() {
-        if (interstitial.IsLoaded()) {
+        if (interstitial != null && interstitial.IsLoaded()) {
             interstitial.Show();
         }
     }
 
     public static void DestroyInterstitial() {
-        interstitial.Destroy();
+        if (interstitial != null) {
+            interstitial.Destroy();
+        }
     }
 
     static void OnLoaded(object sender, EventArgs e) {

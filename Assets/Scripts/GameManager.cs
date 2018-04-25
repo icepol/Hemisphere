@@ -43,14 +43,16 @@ public class GameManager : MonoBehaviour {
         }
 
         set {
+            // level incemented by one
+            bool isIncremented = value == level + 1;
+
             level = value;
+
+            if (isIncremented) {
+                print("is incremented");
+                onLevelIncremented();
+            }
         }
-    }
-
-    public static void IncrementLevel() {
-        level++;
-
-        onLevelIncremented();
     }
 
     public void LoadScene(string scene) {

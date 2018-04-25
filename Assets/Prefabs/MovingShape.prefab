@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 58162782672782584}
   - component: {fileID: 50296148603746424}
   - component: {fileID: 114833804240262760}
+  - component: {fileID: 114393996048213874}
   - component: {fileID: 212564180977544636}
   m_Layer: 0
   m_Name: MovingShape
@@ -109,6 +110,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &114393996048213874
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1568794319885552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b71c302b606a4262ae9e1f242318219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114489488550649708
 MonoBehaviour:
   m_ObjectHideFlags: 1

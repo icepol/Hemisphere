@@ -11,6 +11,9 @@ public class MovingShape : MonoBehaviour {
 	bool isPaused = false;
     bool isActive = true;
 
+    bool colorSet = false;
+    bool shapeSet = false;
+
 	Vector3 startPosition;
 	Vector3 targetPosition;
 
@@ -59,41 +62,67 @@ public class MovingShape : MonoBehaviour {
 		count--;
 	}
 
-	void OnTriggerEnter2D(Collider2D collider) {
+	void OnTriggerEnter2D(Collider2D col) {
         if (!isActive) {
             return;
         }
 
-		Shape shape = collider.gameObject.GetComponent<Shape> ();
-		if (shape && shape.Match (this)) {
-			// increment score
-			scoreCounter.Score += GameManager.Level;
+        StaticShape shape = col.gameObject.GetComponent<StaticShape> ();
 
-			// remove with effect
-			if (soundsManager) {
-				soundsManager.Match ();
-			}
+        if (shape) {
+            CollisionWithShape(shape);
+            return;
+        }
 
-			// create animation
-			Instantiate(right, transform.position, Quaternion.identity);
-
-            isActive = false;
-            StartCoroutine(Hide());
-		} else {
-			// collision with another object, decrement lives
-			gameArea.LostLive ();
-			
-			// destroy with effect
-			if (soundsManager) {
-				soundsManager.Explode ();
-			}
-
-			Instantiate(wrong, transform.position, Quaternion.identity);
-
-            isActive = false;
-            StartCoroutine(Hide());
-		}
+        if (!col.gameObject.GetComponent<IgnoredShape>()) {
+            // ignore collisions with this shape objects
+            CollisionWithWrongObject();
+        }
 	}
+
+    void CollisionWithShape(StaticShape shape) {
+        MatchResult matchResult = shape.Match(this);
+
+        switch (matchResult) {
+            case MatchResult.Ok:
+                CollisionWithRighObject();
+                break;
+            case MatchResult.Wrong:
+                CollisionWithWrongObject();
+                break;
+        }
+    }
+
+    void CollisionWithRighObject() {
+        // increment score
+        scoreCounter.Score += GameManager.Level;
+
+        // remove with effect
+        if (soundsManager) {
+            soundsManager.Match();
+        }
+
+        // create animation
+        Instantiate(right, transform.position, Quaternion.identity);
+
+        isActive = false;
+        StartCoroutine(Hide());
+    }
+
+    void CollisionWithWrongObject() {
+        // collision with another object, decrement lives
+        gameArea.LostLive();
+
+        // destroy with effect
+        if (soundsManager) {
+            soundsManager.Explode();
+        }
+
+        Instantiate(wrong, transform.position, Quaternion.identity);
+
+        isActive = false;
+        StartCoroutine(Hide());
+    }
 
     IEnumerator Hide() {
         transform.localScale = new Vector2(0, 0);
@@ -114,6 +143,7 @@ public class MovingShape : MonoBehaviour {
 
 		set {
 			spriteRenderer.sprite = value;
+            shapeSet = true;
 		}
 	}
 
@@ -124,6 +154,7 @@ public class MovingShape : MonoBehaviour {
 
 		set {
 			spriteRenderer.color = value;
+            colorSet = true;
 		}
 	}
 
@@ -140,4 +171,12 @@ public class MovingShape : MonoBehaviour {
 	public void Resume() {
         isPaused = false;
 	}
+
+    public bool IsColorSet() {
+        return colorSet;
+    }
+
+    public bool IsShapeSet() {
+        return shapeSet;
+    }
 }
