@@ -12,10 +12,10 @@ public class Spawner : MonoBehaviour {
 	float currentSpeed;
 
 	[SerializeField]
-	float moveSpeedDecrement = 0.05f;
+	float moveSpeedDecrement = 0.15f;
 
 	[SerializeField]
-	float levelTehreshold = 10f;
+	float levelTehreshold = 8f;
 
 	[SerializeField]
 	GameObject movingShape;
@@ -37,8 +37,6 @@ public class Spawner : MonoBehaviour {
 	void Start () {
 		height = Camera.main.orthographicSize;
 		width = Camera.main.aspect * height;
-
-		currentSpeed = moveSpeed;
 	}
 
 	// Update is called once per frame
@@ -72,7 +70,7 @@ public class Spawner : MonoBehaviour {
 
         if (currentSpeed <= levelTehreshold) {
             // set speed back to normal
-            currentSpeed = moveSpeed;
+            currentSpeed = levelTehreshold;
         }
     }
 
@@ -152,6 +150,8 @@ public class Spawner : MonoBehaviour {
     }
 
 	public void StartSpawning() {
+        currentSpeed = moveSpeed;
+
         spawnLimit = 10 + (GameManager.Level - 1) * 4;
             
 		spawning = true;

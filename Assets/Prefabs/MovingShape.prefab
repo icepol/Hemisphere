@@ -145,6 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wrong: {fileID: 1763127728618896, guid: 9633828fbb93045efa987f49c5ebfad1, type: 2}
   right: {fileID: 1021467250739244, guid: de8cda34b8ae84425972c40eb877260a, type: 2}
+  dust: {fileID: 1240127901439592, guid: 60bbb6061e6d74779816a770ac2d7b33, type: 2}
 --- !u!212 &212447222080905098
 SpriteRenderer:
   m_ObjectHideFlags: 1

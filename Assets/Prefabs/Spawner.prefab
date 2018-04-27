@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 14
-  moveSpeedDecrement: 0.05
-  levelTehreshold: 10
+  moveSpeedDecrement: 0.15
+  levelTehreshold: 8
   movingShape: {fileID: 1568794319885552, guid: 87dc2c160ff504e89b3bf3bdcf3a1669,
     type: 2}

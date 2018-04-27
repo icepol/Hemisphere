@@ -30,6 +30,9 @@ public class MovingShape : MonoBehaviour {
 	[SerializeField]
 	GameObject right;
 
+    [SerializeField]
+    GameObject dust;
+
 	void Awake() {
         backgroundSpriteRenderer = GetComponent<SpriteRenderer>();
         shapeSriteRenderer = GetComponentInChildren<ShapeInner> ().GetComponent<SpriteRenderer> ();
@@ -46,6 +49,8 @@ public class MovingShape : MonoBehaviour {
 	void Start () {
 		startPosition = gameObject.transform.position;
 		targetPosition = new Vector3 (0, 0, -1);
+
+        StartCoroutine(Dust());
 	}
 	
 	// Update is called once per frame
@@ -104,11 +109,7 @@ public class MovingShape : MonoBehaviour {
             soundsManager.Match();
         }
 
-        // create animation
-        Instantiate(right, transform.position, Quaternion.identity);
-
-        isActive = false;
-        StartCoroutine(Hide());
+        ShowCollisionAnimation(right);
     }
 
     void CollisionWithWrongObject() {
@@ -120,7 +121,16 @@ public class MovingShape : MonoBehaviour {
             soundsManager.Explode();
         }
 
-        Instantiate(wrong, transform.position, Quaternion.identity);
+        ShowCollisionAnimation(wrong);
+    }
+
+    void ShowCollisionAnimation(GameObject prefab) {
+        GameObject animationObject = Instantiate(
+            prefab, transform.position, Quaternion.identity
+        );
+
+        SpriteRenderer spriteRenderer = animationObject.GetComponent<SpriteRenderer>();
+        spriteRenderer.color = backgroundSpriteRenderer.color;
 
         isActive = false;
         StartCoroutine(Hide());
@@ -185,5 +195,18 @@ public class MovingShape : MonoBehaviour {
 
     public bool IsShapeSet() {
         return shapeSet;
+    }
+
+    IEnumerator Dust() {
+        while (isActive) {
+            GameObject dustElement = Instantiate(
+                dust, transform.position, Quaternion.identity
+            );
+
+            SpriteRenderer spriteRenderer = dustElement.GetComponent<SpriteRenderer>();
+            spriteRenderer.color = backgroundSpriteRenderer.color;
+
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }

@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour {
             level = value;
 
             if (isIncremented) {
-                print("is incremented");
                 onLevelIncremented();
             }
         }

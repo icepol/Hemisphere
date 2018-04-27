@@ -130,7 +130,7 @@ public class GameArea : MonoBehaviour {
 		if (soundsManager) {
 			soundsManager.Ring ();
 		}
-        print("stop level");
+
 		spawner.StopSpawning();
 
 		StartCoroutine (HideAll ());
