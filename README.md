@@ -26,8 +26,8 @@ Let's try!
 
 ### Screenshots ###
 
-[!Screenshot from iPhone](https://www.dropbox.com/s/r15fsi1onbt64aw/iphone6%20plus%201.png)
+![Screenshot from iPhone](/Screenshots/iphone6%20plus%201.png)
 
-[!Screenshot from iPhone](https://www.dropbox.com/s/jkrz0dpj10u821h/iphone6%20plus%203.png)
+![Screenshot from iPhone](/Screenshots/iphone6%20plus%203.png)
 
-[!Screenshot from iPad](https://www.dropbox.com/s/os80mdkca9k743h/ipad%202.png)
+![Screenshot from iPad](/Screenshots/ipad%202.png)
