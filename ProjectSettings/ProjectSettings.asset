@@ -240,7 +240,7 @@ PlayerSettings:
   appleDeveloperTeamID: FG3Q88CP7D
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
-  appleEnableAutomaticSigning: 0
+  appleEnableAutomaticSigning: 1
   clonedFromGUID: 00000000000000000000000000000000
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
@@ -262,7 +262,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: ffe57155e81fa4c86b43b8acfbdc26c3, type: 3}
+      m_Icon: {fileID: 2800000, guid: eb4d4e85e72694a3b928f97796078b59, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
