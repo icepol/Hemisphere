@@ -49,7 +49,6 @@ public class GameArea : MonoBehaviour {
 
     Lives lives;
 	Spawner spawner;
-	SoundsManager soundsManager;
 	GameManager gameManager;
 	GameControlls gameControlls;
 
@@ -61,7 +60,6 @@ public class GameArea : MonoBehaviour {
 		wrappersAnimator = wrappers.GetComponent<Animator> ();
 
 		spawner = FindObjectOfType<Spawner> ();
-		soundsManager = FindObjectOfType<SoundsManager> ();
 		scoreCounter = FindObjectOfType<ScoreCounter> ();
 		gameManager = FindObjectOfType<GameManager> ();
 		gameControlls = FindObjectOfType<GameControlls> ();
@@ -98,9 +96,7 @@ public class GameArea : MonoBehaviour {
 	void StartLevel() {
         AnalyticsEvent.LevelStart(GameManager.Level.ToString());
 
-		if (soundsManager) {
-			soundsManager.Ring ();
-		}
+        SoundsManager.Instance.Ring();
 
 		Vector2 shapesDefaultPosition = new Vector2 (shapesRadius, 0);
 		Vector2 colorsDefaultPosition = new Vector2 (colorsRadius, 0);
@@ -127,9 +123,7 @@ public class GameArea : MonoBehaviour {
 	void StopLevel() {
         AnalyticsEvent.LevelComplete(GameManager.Level.ToString());
 		
-		if (soundsManager) {
-			soundsManager.Ring ();
-		}
+        SoundsManager.Instance.Ring();
 
 		spawner.StopSpawning();
 
@@ -314,9 +308,7 @@ public class GameArea : MonoBehaviour {
 	public void ShowPausePanel() {
 		Pause();
 
-		if (soundsManager) {
-			soundsManager.ButtonClick ();
-		}
+        SoundsManager.Instance.ButtonClick();
 
 		pauseAnimator.SetTrigger("ShowPause");
 	}
@@ -324,9 +316,7 @@ public class GameArea : MonoBehaviour {
 	public void HidePausePanel() {
 		pauseAnimator.SetTrigger("HidePause");
 
-		if (soundsManager) {
-			soundsManager.ButtonClick ();
-		}
+        SoundsManager.Instance.ButtonClick();
 
 		Resume();
 	}

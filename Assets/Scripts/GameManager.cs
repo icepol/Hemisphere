@@ -14,13 +14,9 @@ public class GameManager : MonoBehaviour {
 
     static int level = 1;
     static bool showAuthentication = true;
-
-    GameManager instance;
-    SoundsManager soundsManager;
+    static bool isAuthenticated = false;
 
     void Awake() {
-        soundsManager = FindObjectOfType<SoundsManager>();
-
         DontDestroyOnLoad(gameObject);
 
 #if UNITY_ANDROID
@@ -35,6 +31,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void OnUserAuthenticated(bool obj) {
+        isAuthenticated = true;
     }
 
     public static int Level {
@@ -59,21 +56,19 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(scene);
     }
 
-    void PlayClickSound() {
-        if (soundsManager) {
-            soundsManager.ButtonClick();
-        }
-    }
-
     public void ButtonClick(string scene) {
-        PlayClickSound();
+        SoundsManager.Instance.ButtonClick();
 
         AnalyticsEvent.ScreenVisit(scene);
         SceneManager.LoadScene(scene);
     }
 
     public void ShowLeaderBoard() {
-        PlayClickSound();
+        SoundsManager.Instance.ButtonClick();
+
+        if (!isAuthenticated) {
+            Social.localUser.Authenticate(OnUserAuthenticated);
+        }
 
 #if UNITY_IPHONE
         Social.ShowLeaderboardUI();

@@ -4,60 +4,73 @@ using UnityEngine;
 
 public class SoundsManager : MonoBehaviour {
 
-	[SerializeField]
-	AudioClip explode;
+    [SerializeField]
+    AudioClip explode;
 
-	[SerializeField]
-	AudioClip match;
+    [SerializeField]
+    AudioClip match;
 
-	[SerializeField]
-	AudioClip ring;
+    [SerializeField]
+    AudioClip ring;
 
-	[SerializeField]
-	AudioClip swap;
+    [SerializeField]
+    AudioClip swap;
 
-	[SerializeField]
-	AudioClip top;
+    [SerializeField]
+    AudioClip top;
 
-	[SerializeField]
-	AudioClip spawn;
+    [SerializeField]
+    AudioClip spawn;
 
-	[SerializeField]
-	AudioClip buttonClick;
+    [SerializeField]
+    AudioClip buttonClick;
 
-	void Awake() {
-		DontDestroyOnLoad(this);
-	}
+    static SoundsManager instance;
 
-	public void Play(AudioClip clip, Vector2? position = null) {
-		AudioSource.PlayClipAtPoint (clip, position ?? Vector2.zero);
-	}
+    public static SoundsManager Instance {
+        get {
+            if (instance == null) {
+                GameObject prefab = (GameObject)Resources.Load("SoundsManager", typeof(GameObject));
+                GameObject gameObject = Instantiate(prefab);
 
-	public void Explode(Vector2? position = null) {
-		Play (explode, position);
-	}
+                DontDestroyOnLoad(gameObject);
 
-	public void Match(Vector2? position = null) {
-		Play (match, position);
-	}
+                instance = gameObject.GetComponent<SoundsManager>();
+            }
 
-	public void Ring(Vector2? position = null) {
-		Play (ring, position);
-	}
+            return instance;
+        }
+    }
 
-	public void Swap(Vector2? position = null) {
-		Play (swap, position);
-	}
+    public void Play(AudioClip clip, Vector2? position = null) {
+        AudioSource.PlayClipAtPoint (clip, position ?? Vector2.zero);
+    }
 
-	public void Top(Vector2? position = null) {
-		Play (top, position);
-	}
+    public void Explode(Vector2? position = null) {
+        Play (explode, position);
+    }
 
-	public void Spawn(Vector2? position = null) {
-		Play (spawn, position);
-	}
+    public void Match(Vector2? position = null) {
+        Play (match, position);
+    }
 
-	public void ButtonClick(Vector2? position = null) {
-		Play (buttonClick, position);
-	}
+    public void Ring(Vector2? position = null) {
+        Play (ring, position);
+    }
+
+    public void Swap(Vector2? position = null) {
+        Play (swap, position);
+    }
+
+    public void Top(Vector2? position = null) {
+        Play (top, position);
+    }
+
+    public void Spawn(Vector2? position = null) {
+        Play (spawn, position);
+    }
+
+    public void ButtonClick(Vector2? position = null) {
+        Play (buttonClick, position);
+    }
 }

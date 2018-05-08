@@ -18,7 +18,7 @@ Let's try!
 ### Play in your phone ###
 
 * [Android](https://play.google.com/store/apps/details?id=org.kneego.hemisphere)
-* iOS soon
+* [iOS](https://itunes.apple.com/us/app/hemisphere/id1335093610?mt=8)
 
 ### Preview ###
 

@@ -26,11 +26,8 @@ public class Spawner : MonoBehaviour {
 	bool spawning = false;
     int spawnLimit;
 
-	SoundsManager soundsManager;
-
 	void Awake() {
 		gameArea = FindObjectOfType<GameArea> ();
-		soundsManager = FindObjectOfType<SoundsManager> ();
 	}
 
 	// Use this for initialization
@@ -77,9 +74,7 @@ public class Spawner : MonoBehaviour {
 	void SpawnShape() {
         spawnLimit -= 1;
 
-        if (soundsManager) {
-            soundsManager.Spawn();
-        }
+        SoundsManager.Instance.Spawn();
 
         if (GameManager.Level > 2 && Random.Range(0, 10) > 8) {
             SpawnCombo();
